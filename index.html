@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ロト6統計ダッシュボード Ver.1 | NUMBER &amp; SPORTS LAB</title>
+  <title>ロト6統計ダッシュボード Ver.2 | NUMBER &amp; SPORTS LAB</title>
   <link rel="stylesheet" href="style.css">
   <script src="loto6-data.js" defer></script>
   <script src="script.js" defer></script>
@@ -17,8 +17,8 @@
   </header>
   <main class="wrap">
     <section class="intro" aria-labelledby="title">
-      <h1 id="title">ロト6統計ダッシュボード <span>Ver.1</span></h1>
-      <p>本数字6個の出現回数と組み合わせの傾向を、抽選期間ごとに確認できます。</p>
+      <h1 id="title">ロト6統計ダッシュボード <span>Ver.2</span></h1>
+      <p>本数字とボーナス数字の出現回数や、本数字の組み合わせの傾向を、抽選期間ごとに確認できます。</p>
     </section>
 
     <p id="error" class="panel" role="alert" hidden></p>
@@ -56,16 +56,22 @@
               </select>
             </div>
           </div>
+          <div class="frequency-controls" role="group" aria-label="集計する数字" aria-describedby="frequency-note">
+            <button type="button" id="frequency-main" aria-pressed="true">本数字</button>
+            <button type="button" id="frequency-bonus" aria-pressed="false">ボーナス数字</button>
+          </div>
+          <p id="frequency-note" aria-live="polite"></p>
           <ul id="frequency" class="bar-list frequency-list" aria-label="数字ごとの出現回数"></ul>
         </section>
         <div class="side">
           <section class="panel distribution" aria-labelledby="parity-title">
             <h2 id="parity-title">奇数：偶数</h2>
+            <p>本数字6個の構成</p>
             <ul id="parity" class="bar-list ratio-list" aria-label="奇数と偶数の構成比"></ul>
           </section>
           <section class="panel distribution" aria-labelledby="size-title">
             <h2 id="size-title">小：大</h2>
-            <p>小は01〜21、大は22〜43</p>
+            <p>本数字6個の構成 · 小は01〜21、大は22〜43</p>
             <ul id="size" class="bar-list ratio-list" aria-label="小と大の構成比"></ul>
           </section>
         </div>

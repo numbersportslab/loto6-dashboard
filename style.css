@@ -57,6 +57,33 @@ select {
 .frequency { border-top: 2px solid #76b6fa; }
 .distribution { border-top: 2px solid #ab8afa; }
 .section-head { display: flex; justify-content: space-between; align-items: end; gap: 8px 14px; flex-wrap: wrap; }
+.frequency-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 350px;
+  margin-block: 13px 8px;
+}
+.frequency-controls button {
+  min-height: 44px;
+  padding: 6px;
+  border: 1px solid #53698f;
+  border-radius: 8px;
+  background: #1e2d4a;
+  color: inherit;
+  font: inherit;
+  font-size: .875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.frequency-controls button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #b6d8ff, #d5c0ff);
+  border-color: #d5c0ff;
+  color: #141e36;
+}
+.frequency:has(#frequency-bonus[aria-pressed="true"]) .bar {
+  background: linear-gradient(90deg, #9974ef, #c6aaff);
+}
 .panel p { margin-top: 4px; }
 .bar-list { padding: 0; margin: 13px 0 0; list-style: none; font-variant-numeric: tabular-nums; }
 .frequency-list { display: grid; grid-template-rows: repeat(22, auto); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }

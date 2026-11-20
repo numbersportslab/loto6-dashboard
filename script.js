@@ -12,10 +12,12 @@ const numberLabel = (number) => String(number).padStart(2, "0");
 
 function aggregate(draws) {
   const frequency = Array(43).fill(0);
+  const bonusFrequency = Array(43).fill(0);
   const parity = Array(7).fill(0);
   const size = Array(7).fill(0);
   const sums = new Map();
-  for (const { main } of draws) {
+  for (const { main, bonus } of draws) {
+    bonusFrequency[bonus - 1] += 1;
     let odd = 0;
     let small = 0;
     let sum = 0;
@@ -29,7 +31,7 @@ function aggregate(draws) {
     size[small] += 1;
     sums.set(sum, (sums.get(sum) ?? 0) + 1);
   }
-  return { frequency, parity, size, sums };
+  return { frequency, bonusFrequency, parity, size, sums };
 }
 
 function sortFrequency(frequency, order) {
@@ -97,35 +99,59 @@ function showDate(id, value) {
 }
 
 function init(data) {
-  if (!data?.draws?.length || !data.updatedOn) {
+  if (!data?.draws?.length || !data.updatedOn ||
+      data.draws.some(({ bonus }) => !Number.isInteger(bonus) || bonus < 1 || bonus > 43)) {
     const error = byId("error");
-    error.textContent = "抽選履歴を読み込めませんでした。loto6-data.js が同じフォルダにあるか確認してください。";
+    error.textContent = "抽選履歴を読み込めませんでした。Ver.2用の loto6-data.js が同じフォルダにあるか確認してください。";
     error.hidden = false;
     return;
   }
 
   const period = byId("period");
   const sort = byId("sort");
-  let frequency;
+  const mainButton = byId("frequency-main");
+  const bonusButton = byId("frequency-bonus");
+  let summary;
+  let showBonus = false;
+
+  function renderSelectedFrequency() {
+    mainButton.setAttribute("aria-pressed", String(!showBonus));
+    bonusButton.setAttribute("aria-pressed", String(showBonus));
+    byId("frequency-note").textContent = showBonus
+      ? "各回のボーナス数字1個を、本数字6個の統計と別に集計しています。"
+      : "各回の本数字6個を集計しています。";
+    byId("frequency").setAttribute("aria-label", showBonus
+      ? "ボーナス数字ごとの出現回数"
+      : "本数字ごとの出現回数");
+    renderFrequency(showBonus ? summary.bonusFrequency : summary.frequency, sort.value);
+  }
+
   function renderPeriod() {
     const limit = periods.get(period.value) ?? Infinity;
     const draws = data.draws.slice(-limit);
     const first = draws[0];
     const last = draws.at(-1);
     const total = draws.length;
-    const summary = aggregate(draws);
-    frequency = summary.frequency;
+    summary = aggregate(draws);
     byId("draw-count").textContent = `${countFormat.format(total)}回`;
     byId("draw-range").textContent = `第${first.draw}回〜第${last.draw}回`;
     showDate("last-date", last.date);
-    renderFrequency(frequency, sort.value);
+    renderSelectedFrequency();
     renderRatios("parity", summary.parity, total);
     renderRatios("size", summary.size, total);
     renderSums(summary.sums, total);
   }
   showDate("updated-on", data.updatedOn);
   period.addEventListener("change", renderPeriod);
-  sort.addEventListener("change", () => renderFrequency(frequency, sort.value));
+  sort.addEventListener("change", renderSelectedFrequency);
+  mainButton.addEventListener("click", () => {
+    showBonus = false;
+    renderSelectedFrequency();
+  });
+  bonusButton.addEventListener("click", () => {
+    showBonus = true;
+    renderSelectedFrequency();
+  });
   renderPeriod();
   byId("dashboard").hidden = false;
 }
