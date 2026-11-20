@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ロト6統計ダッシュボード Ver.1 | NUMBER &amp; SPORTS LAB</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="loto6-data.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand"><span aria-hidden="true"></span>NUMBER &amp; SPORTS LAB</div>
+      <a href="../index.html">ロト6数字セレクター</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">ロト6統計ダッシュボード <span>Ver.1</span></h1>
+      <p>本数字6個の出現回数と組み合わせの傾向を、抽選期間ごとに確認できます。</p>
+    </section>
+
+    <p id="error" class="panel" role="alert" hidden></p>
+    <div id="dashboard" hidden>
+      <section class="panel overview" aria-label="収録データと期間">
+        <div class="period">
+          <label for="period">集計期間</label>
+          <select id="period">
+            <option value="all">全期間</option>
+            <option value="30">直近30回</option>
+            <option value="100">直近100回</option>
+            <option value="500">直近500回</option>
+          </select>
+        </div>
+        <dl class="metadata" aria-live="polite">
+          <div><dt>対象抽選回数</dt><dd id="draw-count"></dd><small id="draw-range"></small></div>
+          <div><dt>最終抽選日</dt><dd><time id="last-date"></time></dd></div>
+          <div><dt>データ更新日</dt><dd><time id="updated-on"></time></dd></div>
+        </dl>
+      </section>
+
+      <div class="chart-layout">
+        <section class="panel frequency" aria-labelledby="frequency-title">
+          <div class="section-head">
+            <div>
+              <h2 id="frequency-title">数字別の出現回数</h2>
+              <p>数字01〜43 · 単位は回</p>
+            </div>
+            <div class="sort">
+              <label for="sort">並べ替え</label>
+              <select id="sort">
+                <option value="number">数字順</option>
+                <option value="desc">出現回数が多い順</option>
+                <option value="asc">出現回数が少ない順</option>
+              </select>
+            </div>
+          </div>
+          <ul id="frequency" class="bar-list frequency-list" aria-label="数字ごとの出現回数"></ul>
+        </section>
+        <div class="side">
+          <section class="panel distribution" aria-labelledby="parity-title">
+            <h2 id="parity-title">奇数：偶数</h2>
+            <ul id="parity" class="bar-list ratio-list" aria-label="奇数と偶数の構成比"></ul>
+          </section>
+          <section class="panel distribution" aria-labelledby="size-title">
+            <h2 id="size-title">小：大</h2>
+            <p>小は01〜21、大は22〜43</p>
+            <ul id="size" class="bar-list ratio-list" aria-label="小と大の構成比"></ul>
+          </section>
+        </div>
+      </div>
+
+      <section class="panel sums" aria-labelledby="sum-title">
+        <h2 id="sum-title">合計値ランキング TOP10</h2>
+        <p>本数字6個の合計を出現回数順に表示します。同数の場合は合計値の小さい順です。</p>
+        <table>
+          <thead><tr><th scope="col">順位</th><th scope="col">合計値</th><th scope="col">出現回数</th><th scope="col">割合</th></tr></thead>
+          <tbody id="sums"></tbody>
+        </table>
+      </section>
+    </div>
+    <noscript><p class="panel">統計を表示するにはJavaScriptを有効にしてください。</p></noscript>
+    <footer>過去の出現頻度は、将来の当選確率を高めるものではありません。</footer>
+  </main>
+</body>
+</html>
